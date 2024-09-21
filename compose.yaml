@@ -1,0 +1,23 @@
+
+services:
+  bakugan:
+    build:
+      context: ./api/bakugan
+      dockerfile: Dockerfile
+
+    image: bakugan
+    volumes:
+      - ./api/bakugan:/usr/src/app
+    ports:
+      - 3000:3000
+
+  wiki-frontend:
+    build:
+      context: ./wiki-frontend
+      dockerfile: Dockerfile
+
+    image: wiki-frontend
+    volumes:
+      - ./wiki-frontend:/usr/share/nginx/html
+    ports:
+      - 8080:80
