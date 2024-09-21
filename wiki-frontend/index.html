@@ -16,41 +16,77 @@
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => document.querySelectorAll(selector);
 
-    function traer_info() {
+    function traer_info_pokemon() {
       const QUERY = 1;
-      const $$insertados = $$("#insertado");
       const $PokeTabla = $("#info_pokemon");
-
-      fetch("/api/bakugan/status")
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        });
 
       fetch(`https://pokeapi.co/api/v2/generation/${QUERY}/`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          /* console.log({
-        insertados: $$insertados,
-      }) */
-          // $$insertados.parentNode.removeChild($$insertados);
-
-          const topMoves = data.moves.slice(0, 4);
+          // Limpiar contenido previo
           $PokeTabla.innerHTML = "";
-          topMoves.forEach((move, index) => {
-            console.log(move);
-            const new_move = document.createElement("div");
-            new_move.innerHTML = `<h1>${move.name}</h1>`;
-            $PokeTabla.appendChild(new_move);
+
+          // Crear lista desordenada
+          const ul = document.createElement("ul");
+
+          // Iterar sobre los resultados de Pokémon y crear elementos <li>
+          data.pokemon_species.forEach((pokemon) => {
+            const li = document.createElement("li");
+            li.textContent = pokemon.name;
+            ul.appendChild(li);
           });
-          // $PokeTabla.innerHTML = (`
-          //     <div id="insertado">
-          //       <h1>Ejemplo</h1>
-          //     </div>
-          // `)
+
+          // Insertar la lista en el div de info_pokemon
+          $PokeTabla.appendChild(ul);
         })
         .catch((error) => console.error(error));
+    }
+
+    function traer_info_bakugan() {
+      const QUERY = 1;
+      const $PokeTabla = $("#info_bakugan");
+
+      fetch("/api/poke/get-all-bakugan")
+        .then((res) => res.json())
+        .then((data) => {
+          // Limpiar contenido previo
+          $PokeTabla.innerHTML = "";
+
+          // Crear lista desordenada
+          const ul = document.createElement("ul");
+
+          // Iterar sobre los resultados de Pokémon y crear elementos <li>
+          data.forEach((pokemon) => {
+            const li = document.createElement("li");
+            li.textContent = pokemon.name;
+            ul.appendChild(li);
+          });
+
+          // Insertar la lista en el div de info_pokemon
+          $PokeTabla.appendChild(ul);
+        })
+        .catch((error) => console.error(error));
+
+      /* fetch(`/api/v2/generation/${QUERY}/`)
+    .then((res) => res.json())
+    .then((data) => {
+      // Limpiar contenido previo
+      $PokeTabla.innerHTML = "";
+
+      // Crear lista desordenada
+      const ul = document.createElement("ul");
+
+      // Iterar sobre los resultados de Pokémon y crear elementos <li>
+      data.pokemon_species.forEach((pokemon) => {
+        const li = document.createElement("li");
+        li.textContent = pokemon.name;
+        ul.appendChild(li);
+      });
+
+      // Insertar la lista en el div de info_pokemon
+      $PokeTabla.appendChild(ul);
+    })
+    .catch((error) => console.error(error)); */
     }
   </script>
   <link rel="stylesheet" href="/styles/global.css" />
@@ -67,14 +103,12 @@
 
     <section class="tw-grid tw-grid-cols-3 tw-gap-4 tw-mt-5">
       <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4 tw-text-center">
-        <button onclick="traer_info()"
+        <button onclick="traer_info_pokemon()"
           class="tw-bg-slate-500 tw-px-4 tw-py-3 tw-text-white tw-rounded-lg hover:tw-bg-slate-600 active:tw-bg-slate-800">
           Traer Información
         </button>
         <div id="info_pokemon">
-          <div id="insertado">
-            <h1>Ejemplo</h1>
-          </div>
+          <div id="insertado"></div>
         </div>
         <div>Aqui va lo de PokeAPI</div>
       </div>
@@ -83,6 +117,14 @@
       </div>
       <div class="tw-bg-white tw-rounded-lg tw-px-6 tw-py-4">
         Aquí va lo de BakuganAPI
+        <button onclick="traer_info_bakugan()"
+          class="tw-bg-slate-500 tw-px-4 tw-py-3 tw-text-white tw-rounded-lg hover:tw-bg-slate-600 active:tw-bg-slate-800">
+          Traer Información
+        </button>
+
+        <div id="info_bakugan">
+          <div id="insertado"></div>
+        </div>
       </div>
     </section>
   </main>

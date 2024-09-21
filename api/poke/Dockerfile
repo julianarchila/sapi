@@ -8,6 +8,9 @@ RUN pip install -r /requirements/local.txt
 
 
 WORKDIR /app
-COPY ./main.py /app/main.py
+COPY . .
 
-ENTRYPOINT ["python", "main.py"]
+# ENTRYPOINT ["python", "main.py"]
+# run flask app
+# python -m flask --app main run
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0", "--debug"]
